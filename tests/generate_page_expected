@@ -1,0 +1,26 @@
+<html>
+
+<head>
+  <title>wordle</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body>
+  <div class="page-wrapper">
+    <nav>
+      <div class="menu"><img src="images/ask-question.png" alt="ask"></div>
+      <header class="title">
+        <h1>WORDLE</h1>
+      </header>
+      <div class="menu ">
+        <img src="images/statistics.png" alt="statistics">
+        <img src="images/settings.png" alt="settings">
+      </div>
+    </nav>
+    <div class="words">
+      <div class="word"><div class="match letter">C</div><div class="not-match letter">A</div><div class="match letter">T</div></div><div class="word"><div class="match letter">B</div><div class="not-match letter">A</div><div class="exact-match letter">T</div></div>
+    </div>
+  </div>
+</body>
+
+</html>

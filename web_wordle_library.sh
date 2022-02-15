@@ -87,29 +87,31 @@ function generate_letter_html() {
 
 function generate_page() {
   local wordle_template=$1
-  local word=($2)
+  local words=($2)
   local similarities=($3)
-  local last_index=$((${#word[@]} - 1))
+  local last_index=$((${#words[@]} - 1))
   local word_html
 
   for index in `seq 0 ${last_index}`
   do
-    local letter_html=$(generate_letter_html "${word[${index}]}" "${similarities[${index}]}")
+    local letter_html=$(generate_letter_html "${words[${index}]}" "${similarities[${index}]}")
     word_html+=$(generate_html "div" "word" "${letter_html}")
   done
 
-  sed s:__WORDS__:"${word_html}": templates/wordle_template > html/wordle.html
-  open html/wordle.html
+  sed s:__WORDS__:"${word_html}": ${wordle_template} 
 }
 
 function launch_wordle() {
   local selected_word=$1
+  local wordle_template=$2
+  local target_file=$3
   local guessed_word similarities
   
   for limit in $(seq 0 ${#selected_word}); do
     read guessed_word[${limit}]
     similarities[${limit}]="$(check_letter_existence "${selected_word}" "${guessed_word[${limit}]}" | tr " " "\0")" 
-    generate_page "" "${guessed_word[*]}" "${similarities[*]}"
+    generate_page "${wordle_template}" "${guessed_word[*]}" "${similarities[*]}" > ${target_file}
+    open ${target_file}
 
     if [[ "${selected_word}" == "${guessed_word[${limit}]}" ]]; then
       return 0
@@ -127,7 +129,7 @@ function main() {
   echo "Guess ${#selected_word} letter word."
   local game_status="Lost"
 
-  launch_wordle "${selected_word}"
+  launch_wordle "${selected_word}" "templates/wordle_template" "html/wordle.html"
   local status=$?
 
   if [[ ${status} == 0 ]]; then
